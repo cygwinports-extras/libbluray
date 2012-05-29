@@ -1,0 +1,6 @@
+category: Video
+requires: libbluray1
+external-source: libbluray
+sdesc: "Blu-Ray Disc playback library (development)"
+ldesc: "libbluray is an open-source library designed for Blu-Ray Discs 
+playback for media players, like VLC or MPlayer."
