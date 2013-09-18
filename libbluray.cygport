@@ -1,0 +1,16 @@
+NAME="libbluray"
+VERSION=0.2.2
+RELEASE=1
+CATEGORY="Libs"
+SUMMARY="Blu-Ray Disc playback library"
+DESCRIPTION="libbluray is an open-source library designed for Blu-Ray Discs
+playback for media players, like VLC or MPlayer."
+HOMEPAGE="http://www.videolan.org/developers/libbluray.html"
+SRC_URI="ftp://ftp.videolan.org/pub/videolan/libbluray/${VERSION}/${NAME}-${VERSION}.tar.bz2"
+PATCH_URI="0.2.2-cygwin.patch"
+
+PKG_NAMES="libbluray1 libbluray-devel"
+libbluray1_CONTENTS="usr/bin/cygbluray-1.dll usr/share/doc/"
+libbluray_devel_CONTENTS="usr/include/ usr/lib/"
+
+KEEP_LA_FILES="none"

@@ -1,6 +1,0 @@
-category: Video
-requires: libgcc1 libxml2
-external-source: libbluray
-sdesc: "Blu-Ray Disc playback library (runtime)"
-ldesc: "libbluray is an open-source library designed for Blu-Ray Discs 
-playback for media players, like VLC or MPlayer."
