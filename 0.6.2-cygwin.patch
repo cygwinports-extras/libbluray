@@ -1,0 +1,51 @@
+--- origsrc/libbluray-0.6.2/src/Makefile.am	2014-09-01 07:06:01.000000000 -0500
++++ src/libbluray-0.6.2/src/Makefile.am	2015-05-19 16:13:55.098049000 -0500
+@@ -120,7 +120,7 @@ endif
+ endif
+ 
+ 
+-libbluray_la_LDFLAGS= -version-info $(LT_VERSION_INFO)
++libbluray_la_LDFLAGS= -version-info $(LT_VERSION_INFO) -no-undefined
+ libbluray_la_LIBADD= $(LIBXML2_LIBS) $(FT2_LIBS)
+ 
+ pkginclude_HEADERS = \
+--- origsrc/libbluray-0.6.2/src/file/dl_posix.c	2014-09-01 07:06:01.000000000 -0500
++++ src/libbluray-0.6.2/src/file/dl_posix.c	2015-05-19 16:12:53.327705200 -0500
+@@ -69,6 +69,15 @@ void *dl_dlopen(const char *path, const
+                                          "@executable_path/lib/", "@executable_path/../lib/",
+                                          "@executable_path/../Resources/", "@rpath/", NULL};
+     version = NULL;
++#elif defined(__CYGWIN__)
++    char *cygpath = strdup (path);
++    if ((strncmp (path, "lib", 3) == 0)) {
++        cygpath[0] = 'c';
++        cygpath[1] = 'y';
++        cygpath[2] = 'g';
++    }
++    static const char ext[] = ".dll";
++    static const char *search_paths[] = {"", NULL};
+ #else
+     static const char ext[] = ".so";
+     static const char *search_paths[] = {"", NULL};
+@@ -76,7 +85,11 @@ void *dl_dlopen(const char *path, const
+ 
+     for (i = 0 ; search_paths[i] ; ++i) {
+         if (version) {
++#ifdef __CYGWIN__
++            name = str_printf("%s%s-%s%s", search_paths[i], cygpath, version, ext);
++#else
+             name = str_printf("%s%s%s.%s", search_paths[i], path, ext, version);
++#endif
+         } else {
+             name = str_printf("%s%s%s", search_paths[i], path, ext);
+         }
+@@ -89,6 +102,9 @@ void *dl_dlopen(const char *path, const
+             return dll;
+         }
+     }
++#ifdef __CYGWIN__
++    free (cygpath);
++#endif
+ 
+     return NULL;
+ }
